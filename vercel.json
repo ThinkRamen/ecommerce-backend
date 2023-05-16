@@ -5,7 +5,7 @@
 			"use": "@vercel/python",
 			"config": { "runtime": "python3.9" }
 		},
-		{ "src": "/backendbuild_files.sh", "use": "@vercel/static-build" }
+		{ "src": "/backend/build_files.sh", "use": "@vercel/static-build" }
 	],
 	"routes": [{ "src": "/(.*)", "dest": "backend/wsgi.py" }]
 }
