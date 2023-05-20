@@ -28,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = User
         fields = ['id', '_id', 'username', 'email', 'name', 'isAdmin', 'token']
@@ -38,6 +39,7 @@ class UserSerializerWithToken(UserSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Product
         fields = '__all__'
