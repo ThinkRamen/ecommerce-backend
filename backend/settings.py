@@ -153,19 +153,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
     # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'postgres',
-    #     'HOST': os.environ.get('SUPABASE_HOST'),
-    #     'PASSWORD': os.environ.get('SUPABASE_PW'),
-    #     'PORT': 5432,
-    #     'USER': 'postgres',
-    #     'CERT': os.environ.get('CA_CERT')
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'HOST': os.environ.get('SUPABASE_HOST'),
+        'PASSWORD': os.environ.get('SUPABASE_PW'),
+        'PORT': 5432,
+        'USER': 'postgres',
+        'CERT': os.environ.get('CA_CERT')
+    }
 }
 
 # Password validation
@@ -204,17 +204,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-# Configures the staticfiles directory to serve
-# static files from /static/ on our deployment
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STORAGES = {
-    # ...
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    'default': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        'OPTIONS': {
+            # Specify any additional options for the storage backend if needed
+        },
+    },
+    'staticfiles': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        'LOCATION': STATIC_ROOT,
     },
 }
 
