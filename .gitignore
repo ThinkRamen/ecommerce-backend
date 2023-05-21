@@ -1,2 +1,3 @@
 .vercel
 /backend/certs
+/backend/.env
