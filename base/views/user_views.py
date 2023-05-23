@@ -16,12 +16,12 @@ from rest_framework import status
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-
     def validate(self, attrs):
         data = super().validate(attrs)
         serializer = UserSerializerWithToken(self.user).data
         for k, v in serializer.items():
             data[k] = v
+        print(data)
         # data['username'] = self.user.username
         # data['email'] = self.user.email
         return data
@@ -31,22 +31,24 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-@api_view(http_method_names=['POST'])
+@api_view(http_method_names=["POST"])
 def registerUser(request):
     data = request.data
     try:
-        user = User.objects.create(first_name=data['name'],
-                                   username=data['email'],
-                                   email=data['email'],
-                                   password=make_password(data['password']))
+        user = User.objects.create(
+            first_name=data["name"],
+            username=data["email"],
+            email=data["email"],
+            password=make_password(data["password"]),
+        )
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data)
     except:
-        message = {'detail': 'User with this email already exists'}
+        message = {"detail": "User with this email already exists"}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(http_method_names=['PUT'])
+@api_view(http_method_names=["PUT"])
 @permission_classes([IsAuthenticated])
 def updateUserProfile(request):
     user = request.user
@@ -55,18 +57,18 @@ def updateUserProfile(request):
 
     data = request.data
 
-    user.first_name = data['name']
-    user.username = data['email']
-    user.email = data['email']
+    user.first_name = data["name"]
+    user.username = data["email"]
+    user.email = data["email"]
 
-    if data['password'] != '':
-        user.password = make_password(data['password'])
+    if data["password"] != "":
+        user.password = make_password(data["password"])
     user.save()
 
     return Response(serializer.data)
 
 
-@api_view(http_method_names=['GET'])
+@api_view(http_method_names=["GET"])
 @permission_classes([IsAuthenticated])
 def getUserProfile(request):
     user = request.user
@@ -74,7 +76,7 @@ def getUserProfile(request):
     return Response(serializer.data)
 
 
-@api_view(http_method_names=['GET'])
+@api_view(http_method_names=["GET"])
 @permission_classes([IsAdminUser])
 def getUsers(request):
     users = User.objects.all()
